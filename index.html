@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عيادة الدكتور وليد | جراحة وتجميل الأنف والوجه</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-color: #070d1e;
+      --card-bg: #0f172a;
+      --card-border: #1e293b;
+      --accent-blue: #0284c7;
+      --accent-cyan: #38bdf8;
+      --accent-orange: #f59e0b;
+      --accent-green: #10b981;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+    body { background-color: var(--bg-color); color: var(--text-main); padding: 30px 16px 100px; max-width: 520px; margin: 0 auto; }
+
+    .header { text-align: center; margin-bottom: 26px; }
+    .logo-box {
+      width: 72px; height: 72px; margin: 0 auto 16px;
+      border: 2px solid #b45309; border-radius: 22px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(15, 23, 42, 0.7);
+    }
+    .logo-box i { font-size: 32px; color: #38bdf8; }
+    .badge-pill {
+      display: inline-block; background: rgba(2, 132, 199, 0.2);
+      color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 4px 18px; border-radius: 20px; font-size: 0.82rem; font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .header h1 { font-size: 1.65rem; font-weight: 900; margin-bottom: 6px; }
+    .header p { color: var(--text-muted); font-size: 0.88rem; }
+
+    .section-title {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 1.05rem; font-weight: 800; margin: 26px 0 14px;
+      color: #fff;
+    }
+    .section-title::before {
+      content: ''; display: inline-block; width: 7px; height: 7px;
+      background: #38bdf8; border-radius: 50%;
+    }
+
+    .card-list { display: flex; flex-direction: column; gap: 12px; }
+    .service-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 16px; padding: 16px 14px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .service-info { flex: 1; }
+    .service-info h3 { font-size: 0.95rem; font-weight: 800; margin-bottom: 4px; color: #fff; }
+    .service-info p { font-size: 0.76rem; color: var(--text-muted); line-height: 1.45; }
+
+    .btn-action {
+      text-decoration: none; font-size: 0.82rem; font-weight: 700;
+      padding: 8px 14px; border-radius: 10px; display: inline-flex;
+      align-items: center; gap: 6px; white-space: nowrap; cursor: pointer;
+    }
+    .btn-orange { background: #d97706; color: #fff; }
+    .btn-blue { background: #0284c7; color: #fff; }
+
+    .highlight-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 20px; padding: 18px 16px; margin-bottom: 15px;
+    }
+    .highlight-card h2 { font-size: 1.12rem; font-weight: 800; margin-bottom: 6px; }
+    .highlight-card p.desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; }
+
+    .gallery-slider {
+      display: flex; gap: 10px; overflow-x: auto;
+      padding-bottom: 10px; margin-bottom: 14px; scroll-snap-type: x mandatory;
+    }
+    .gallery-slider::-webkit-scrollbar { height: 4px; }
+    .gallery-slider::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+
+    .gallery-thumb {
+      flex: 0 0 140px; height: 160px; border-radius: 14px;
+      overflow: hidden; border: 1px solid #1e293b; background: #000;
+      position: relative; scroll-snap-align: start;
+    }
+    .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .gallery-thumb .thumb-tag {
+      position: absolute; bottom: 0; right: 0; left: 0;
+      background: rgba(0,0,0,0.65); font-size: 0.65rem; color: #e2e8f0;
+      padding: 4px 6px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .btn-card-large {
+      display: block; width: 100%; text-align: center;
+      background: #d97706; color: #fff; text-decoration: none;
+      padding: 12px; border-radius: 12px; font-size: 0.92rem; font-weight: 800;
+    }
+
+    .schedule-box {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 18px; padding: 18px 16px;
+    }
+    .schedule-item {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #0b1329; border: 1px solid #1e293b;
+      padding: 12px 14px; border-radius: 12px; margin-bottom: 10px;
+      font-size: 0.82rem;
+    }
+    .clinic-loc { font-weight: 800; color: #f8fafc; display: flex; align-items: center; gap: 6px; }
+    .clinic-time { color: #38bdf8; font-weight: 700; direction: ltr; }
+
+    .btn-maps {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      background: transparent; color: #38bdf8; border: 1px solid #0284c7;
+      text-decoration: none; padding: 12px; border-radius: 12px;
+      font-weight: 800; font-size: 0.9rem; margin-top: 14px;
+    }
+
+    .fixed-bar {
+      position: fixed; bottom: 12px; left: 16px; right: 16px;
+      max-width: 488px; margin: 0 auto; z-index: 99;
+    }
+    .btn-floating-wa {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      background: #10b981; color: white; text-decoration: none;
+      padding: 14px; border-radius: 16px; font-size: 0.98rem; font-weight: 800;
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.35);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="logo-box">
+      <i class="fas fa-stethoscope"></i>
+    </div>
+    <span class="badge-pill">جراحة وتجميل الأنف والوجه</span>
+    <h1>عيادة الدكتور وليد</h1>
+    <p>تشخيص دقيق، خبرة جراحية، وحلول تجميلية متقدمة</p>
+  </header>
+
+  <section class="highlight-card">
+    <h2>تجميل الأنف وإصلاح مشاكل التنفس</h2>
+    <p class="desc">تقويم انحراف الوتيرة الأنفية، مع تنسيق ونحت مظهر الأنف التجميلي بدقة وتناسق طبيعي.</p>
+
+    <div class="gallery-slider" id="cases_slider">
+      <p style="font-size: 0.8rem; color: #94a3b8; padding: 20px 0;">جاري تحميل حالات المعرض...</p>
+    </div>
+
+    <a href="https://wa.me/963934155337?text=مرحباً دكتور وليد، أرغب بحجز استشارة لتجميل الأنف ومشاكل التنفس" target="_blank" class="btn-card-large">
+      <i class="far fa-comment-dots"></i> حجز استشارة تجميل وتنفس مع الدكتور
+    </a>
+  </section>
+
+  <h2 class="section-title">إجراءات جراحة وتجميل الوجه</h2>
+  <div class="card-list">
+    <div class="service-card">
+      <div class="service-info">
+        <h3>جراحة شد وتجميل الأجفان</h3>
+        <p>إزالة ترهلات الجلد والانتفاخات الدهنية حول العين لاستعادة شباب ونضارة النظرة.</p>
+      </div>
+      <a href="https://wa.me/963934155337?text=استفسار عن جراحة شد وتجميل الأجفان" target="_blank" class="btn-action btn-orange">
+        <i class="far fa-comment-dots"></i> حجز كشفية
+      </a>
+    </div>
+
+    <div class="service-card">
+      <div class="service-info">
+        <h3>شد الوجه الجراحي وبالخيوط</h3>
+        <p>أحدث تقنيات شد الوجه والرقبة جراحياً، وشد الملامح بالخيوط بدون جراحة معقدة.</p>
+      </div>
+      <a href="https://wa.me/963934155337?text=استفسار عن شد الوجه والرقبة" target="_blank" class="btn-action btn-orange">
+        <i class="far fa-comment-dots"></i> حجز كشفية
+      </a>
+    </div>
+
+    <div class="service-card">
+      <div class="service-info">
+        <h3>الحقن التجميلي (بوتوكس • فيلر • ميزو)</h3>
+        <p>ملء الخطوط التعبيرية، توريد وتحديد الملامح، وجلسات نضارة البشرة الفورية.</p>
+      </div>
+      <a href="https://wa.me/963934155337?text=استفسار عن حقن البوتوكس والفيلر والميزو" target="_blank" class="btn-action btn-orange">
+        <i class="far fa-comment-dots"></i> حجز موعد
+      </a>
+    </div>
+  </div>
+
+  <h2 class="section-title">جراحة الأذن والأنف والحنجرة العامة</h2>
+  <div class="card-list">
+    <div class="service-card">
+      <div class="service-info">
+        <h3>تصحيح انحراف الوتيرة الأنفية</h3>
+        <p>علاج انسداد مجرى الهواء، الشخير، ومشاكل الصداع وصعوبة التنفس المزمنة.</p>
+      </div>
+      <a href="https://wa.me/963934155337?text=استفسار عن عملية تصحيح انحراف الوتيرة الأنفية" target="_blank" class="btn-action btn-blue">
+        <i class="far fa-comment-dots"></i> استشارة طبية
+      </a>
+    </div>
+
+    <div class="service-card">
+      <div class="service-info">
+        <h3>استئصال اللوزات والناميات</h3>
+        <p>علاج الالتهابات المتكررة، توقف التنفس أثناء النوم، والشخير للبالغين والأطفال.</p>
+      </div>
+      <a href="https://wa.me/963934155337?text=استفسار عن عملية استئصال اللوزات والناميات" target="_blank" class="btn-action btn-blue">
+        <i class="far fa-comment-dots"></i> استشارة طبية
+      </a>
+    </div>
+
+    <div class="service-card">
+      <div class="service-info">
+        <h3>ترقيع غشاء الطبلة وأمراض الأذن</h3>
+        <p>ترميم انثقاب غشاء الطبل، علاج نقص السمع التوصيلي، والتهابات الأذن الوسطى.</p>
+      </div>
+      <a href="https://wa.me/963934155337?text=استفسار بخصوص ترقيع غشاء الطبلة وأمراض الأذن" target="_blank" class="btn-action btn-blue">
+        <i class="far fa-comment-dots"></i> استشارة طبية
+      </a>
+    </div>
+  </div>
+
+  <h2 class="section-title"><i class="far fa-calendar-alt" style="color:#38bdf8;"></i> جدول المعاينات والدوام الرسمي</h2>
+  <div class="schedule-box">
+    <div class="schedule-item">
+      <span class="clinic-loc"><i class="fas fa-map-marker-alt" style="color:#ef4444;"></i> عيادة جاسم (درعا)</span>
+      <span class="clinic-time">السبت إلى الثلاثاء (11:00 ص - 3:00 م)</span>
+    </div>
+    <div class="schedule-item">
+      <span class="clinic-loc"><i class="fas fa-map-marker-alt" style="color:#ef4444;"></i> عيادة دمشق (الشام)</span>
+      <span class="clinic-time" style="direction:rtl;">الأربعاء والخميس</span>
+    </div>
+
+    <a href="https://maps.google.com" target="_blank" class="btn-maps">
+      <i class="fas fa-map-marked-alt"></i> موقع العيادة على خرائط Google (جاسم)
+    </a>
+  </div>
+
+  <div class="fixed-bar">
+    <a href="https://wa.me/963934155337?text=مرحباً دكتور وليد، أود حجز موعد استشارة في العيادة" target="_blank" class="btn-floating-wa">
+      <i class="fab fa-whatsapp" style="font-size: 1.25rem;"></i> حجز موعد استشارة مع د. وليد عبر الواتساب
+    </a>
+  </div>
+
+  <script>
+    const API_URL = "https://api.npoint.io/766a8109b90581e6695f";
+
+    async function loadCases() {
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        const gallery = data.gallery || [];
+        const container = document.getElementById('cases_slider');
+
+        if (gallery.length === 0) {
+          container.innerHTML = '<p style="color:#94a3b8; font-size:0.8rem; padding:10px;">لا توجد صور حالياً في المعرض.</p>';
+          return;
+        }
+
+        container.innerHTML = gallery.map(item => `
+          <div class="gallery-thumb">
+            <img src="${item.url}" alt="${item.title}" loading="lazy">
+            <div class="thumb-tag">${item.title}</div>
+          </div>
+        `).join('');
+      } catch (e) {
+        document.getElementById('cases_slider').innerHTML = '<p style="color:#ef4444; font-size:0.75rem;">تعذر تحميل الصور حالياً.</p>';
+      }
+    }
+
+    loadCases();
+  </script>
+</body>
+</html>
