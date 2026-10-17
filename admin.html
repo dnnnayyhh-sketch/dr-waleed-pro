@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة التحكم | عيادة الدكتور وليد</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+    body { background: #f8fafc; padding: 20px 15px; color: #0f172a; }
+    .panel { max-width: 480px; margin: 0 auto; background: white; border-radius: 18px; padding: 22px; box-shadow: 0 10px 25px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
+    h2 { font-size: 1.3rem; color: #0284c7; text-align: center; margin-bottom: 6px; }
+    p.sub { font-size: 0.85rem; color: #64748b; text-align: center; margin-bottom: 20px; }
+    
+    .upload-hint { background: #eff6ff; border: 1px dashed #3b82f6; padding: 12px; border-radius: 12px; margin-bottom: 20px; font-size: 0.85rem; line-height: 1.6; }
+    .upload-hint a { color: #1d4ed8; font-weight: 700; text-decoration: underline; }
+
+    .group { margin-bottom: 14px; }
+    label { display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 5px; color: #334155; }
+    input { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.9rem; outline: none; }
+    input:focus { border-color: #0284c7; }
+    
+    .btn-add { width: 100%; background: #0284c7; color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 800; font-size: 0.95rem; cursor: pointer; margin-top: 5px; }
+    .btn-add:active { background: #0369a1; }
+    
+    .gallery-title { font-size: 1.1rem; font-weight: 800; margin: 25px 0 12px; border-top: 1px solid #e2e8f0; padding-top: 15px; }
+    .items-list { display: flex; flex-direction: column; gap: 12px; }
+    .item-card { display: flex; align-items: center; gap: 12px; background: #f1f5f9; padding: 10px; border-radius: 12px; }
+    .item-card img { width: 65px; height: 65px; object-fit: cover; border-radius: 8px; }
+    .item-info { flex-grow: 1; }
+    .item-info h4 { font-size: 0.9rem; color: #0f172a; }
+    .item-info p { font-size: 0.78rem; color: #64748b; }
+    .btn-del { background: #fee2e2; color: #dc2626; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; }
+    
+    .msg { margin-top: 12px; text-align: center; font-size: 0.85rem; font-weight: 700; padding: 8px; border-radius: 8px; display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="panel">
+    <h2>📸 إدارة معرض الدكتور وليد</h2>
+    <p class="sub">إضافة وحذف صور الحالات والعمليات</p>
+
+    <div class="upload-hint">
+      <i class="fas fa-cloud-upload-alt"></i> <strong>طريقة رفع الصور:</strong><br>
+      1. افتح موقع <a href="https://imgbb.com/upload" target="_blank">ImgBB المجاني</a> وارفع صورة الحالة.<br>
+      2. انسخ الرابط المباشر وضعه في الخانة بالأسفل.
+    </div>
+
+    <div class="group">
+      <label>عنوان الحالة / العملية:</label>
+      <input type="text" id="img_title" placeholder="مثال: نحت وتصحيح انحراف الأنف">
+    </div>
+
+    <div class="group">
+      <label>وصف بسيط:</label>
+      <input type="text" id="img_desc" placeholder="مثال: النتيجة بعد العملية بـ 3 أشهر">
+    </div>
+
+    <div class="group">
+      <label>رابط الصورة المباشر:</label>
+      <input type="text" id="img_url" placeholder="https://i.ibb.co/...">
+    </div>
+
+    <button class="btn-add" id="btn_save" onclick="addNewImage()"><i class="fas fa-plus"></i> إضافة الصورة للمعرض فوراً</button>
+    <div id="status_msg" class="msg"></div>
+
+    <h3 class="gallery-title"><i class="fas fa-images"></i> الصور الحالية بالمعرض:</h3>
+    <div class="items-list" id="items_list">
+      <p style="text-align: center; color: #94a3b8; font-size: 0.85rem;">جاري تحميل الصور...</p>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "https://api.npoint.io/766a8109b90581e6695f";
+
+    let fullData = { doctor: { name: "الدكتور وليد", title: "أخصائي جراحة وتجميل الأنف والوجه", phone: "0934155337" }, gallery: [] };
+
+    function extractCleanUrl(input) {
+      if (!input) return "";
+      const match = input.match(/https?:\/\/[^\s"'<>]+\.(?:jpg|jpeg|png|webp|gif)/i);
+      if (match) return match[0];
+      const directMatch = input.match(/https?:\/\/[^\s"'<>]+/i);
+      return directMatch ? directMatch[0] : input.trim();
+    }
+
+    async function loadData() {
+      try {
+        const res = await fetch(API_URL);
+        const json = await res.json();
+        fullData = json;
+        if (!fullData.gallery) fullData.gallery = [];
+        renderList();
+      } catch (e) {
+        document.getElementById('items_list').innerHTML = '<p style="color:red; text-align:center;">تعذر جلب الصور، تأكد من الاتصال.</p>';
+      }
+    }
+
+    function renderList() {
+      const listEl = document.getElementById('items_list');
+      if (fullData.gallery.length === 0) {
+        listEl.innerHTML = '<p style="text-align:center; color:#94a3b8; font-size:0.85rem;">لا توجد صور في المعرض حالياً.</p>';
+        return;
+      }
+      listEl.innerHTML = fullData.gallery.map((img, i) => `
+        <div class="item-card">
+          <img src="${img.url}" alt="${img.title}">
+          <div class="item-info">
+            <h4>${img.title}</h4>
+            <p>${img.desc || ''}</p>
+          </div>
+          <button class="btn-del" onclick="deleteImage(${i})"><i class="fas fa-trash"></i> حذف</button>
+        </div>
+      `).join('');
+    }
+
+    async function updateServer(newGallery) {
+      const msg = document.getElementById('status_msg');
+      const btn = document.getElementById('btn_save');
+      btn.disabled = true;
+      msg.style.display = 'block';
+      msg.style.background = '#e0f2fe';
+      msg.style.color = '#0369a1';
+      msg.innerText = '⏳ جاري تحديث المعرض...';
+
+      fullData.gallery = newGallery;
+
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(fullData)
+        });
+
+        if (res.ok) {
+          renderList();
+          msg.style.background = '#dcfce7';
+          msg.style.color = '#166534';
+          msg.innerText = '✅ تم تحديث المعرض بنجاح!';
+          document.getElementById('img_title').value = '';
+          document.getElementById('img_desc').value = '';
+          document.getElementById('img_url').value = '';
+        } else {
+          throw new Error();
+        }
+      } catch (err) {
+        msg.style.background = '#fee2e2';
+        msg.style.color = '#991b1b';
+        msg.innerText = '❌ تعذر التحديث، تحقق من الاتصال.';
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function addNewImage() {
+      const title = document.getElementById('img_title').value.trim();
+      const desc = document.getElementById('img_desc').value.trim();
+      const rawUrl = document.getElementById('img_url').value.trim();
+      const cleanUrl = extractCleanUrl(rawUrl);
+
+      if (!title || !cleanUrl) {
+        alert("يرجى إدخال عنوان الحالة ورابط الصورة!");
+        return;
+      }
+
+      const updated = [...fullData.gallery, { title, desc, url: cleanUrl }];
+      updateServer(updated);
+    }
+
+    function deleteImage(index) {
+      if (confirm("هل تريد بالتأكيد حذف هذه الصورة من المعرض؟")) {
+        const updated = fullData.gallery.filter((_, i) => i !== index);
+        updateServer(updated);
+      }
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
